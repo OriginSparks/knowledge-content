@@ -49,3 +49,5 @@ service over HTTP.
 <!-- test reindex trigger, safe to remove -->
 
 <!-- test 2 reindex trigger, safe to remove -->
+
+<!-- test 3 reindex trigger, safe to remove -->
