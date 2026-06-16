@@ -46,4 +46,3 @@ This repo is **content-only**. The retrieval/indexing service lives separately
 in `/root/knowledge-base/`. Feishu bot, web UIs, and other tools query that
 service over HTTP.
 
-
