@@ -1,0 +1,38 @@
+name: Reindex KB
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+# Avoid overlapping runs
+concurrency:
+  group: reindex
+  cancel-in-progress: true
+
+jobs:
+  reindex:
+    # Only run for the "reindex PR" — title must start with [reindex]
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '[reindex]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger server reindex via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          command_timeout: 5m
+          script: |
+            set -e
+            echo "[reindex] triggered at $(date -u +%Y-%m-%dT%H:%M:%SZ) by PR #${{ github.event.pull_request.number }}"
+            cd /root/knowledge-base
+            git -C knowledge pull --rebase
+            echo "---"
+            echo "Files in knowledge/:"
+            ls -la knowledge/
+            echo "---"
+            echo "Triggering reindex..."
+            curl -s -X POST http://localhost:8088/index | head -100
+            echo ""
+            echo "[reindex] done"
