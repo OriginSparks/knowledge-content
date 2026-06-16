@@ -46,12 +46,3 @@ This repo is **content-only**. The retrieval/indexing service lives separately
 in `/root/knowledge-base/`. Feishu bot, web UIs, and other tools query that
 service over HTTP.
 
-<!-- test reindex trigger, safe to remove -->
-
-<!-- test 2 reindex trigger, safe to remove -->
-
-<!-- test 3 reindex trigger, safe to remove -->
-
-<!-- test 4 reindex trigger, safe to remove -->
-
-<!-- test 5 -->
