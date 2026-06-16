@@ -16,12 +16,18 @@ jobs:
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '[reindex]')
     runs-on: ubuntu-latest
     steps:
+      - name: Decode SSH key (base64)
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY_B64 }}" | base64 -d > /tmp/github_actions_key
+          chmod 600 /tmp/github_actions_key
+          # Sanity check: file should start with the OpenSSH private key header
+          head -1 /tmp/github_actions_key
       - name: Trigger server reindex via SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: root
-          key: ${{ secrets.VPS_SSH_KEY }}
+          key_path: /tmp/github_actions_key
           command_timeout: 5m
           script: |
             set -e
